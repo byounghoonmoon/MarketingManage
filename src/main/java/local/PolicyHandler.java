@@ -22,8 +22,6 @@ public class PolicyHandler{
     @StreamListener(KafkaProcessor.INPUT)
     public void wheneverReservationRequested_ReservationCollect(@Payload ReservationCompleted completed){
 
-        if(completed.isMe()){
-            //  예약 완료 된건만 마켓팅 전략을 세우기 위해 데이터를 모집한다.
             if(completed.isMe()){
                 Marketing temp = new Marketing();
                 temp.setCustNm(completed.getCustNm());
@@ -32,6 +30,17 @@ public class PolicyHandler{
                 temp.setResvid(completed.getId());
                 marketingRepository.save(temp);
             }
+    }
+
+    @StreamListener(KafkaProcessor.INPUT)
+    public void wheneverReservationChanged_ReservationCollect2(@Payload ReservationChanged changed){
+
+        if(changed.isMe()){
+            //  변경된 것은 상태를 맞춰 준다.
+                Marketing temp = marketingRepository.findByResvid(changed.getId());
+                temp.setStatus(changed.getStatus    ());
+                marketingRepository.save(temp);
+
         }
     }
 
