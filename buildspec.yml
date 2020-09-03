@@ -83,6 +83,12 @@ phases:
                   image: $AWS_ACCOUNT_ID.dkr.ecr.$_AWS_REGION.amazonaws.com/$_ECR_NAME-$_PROJECT_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION
                   ports:
                     - containerPort: 8080
+                   env:
+                    - name: api.hospital.url
+                      valueFrom:
+                        configMapKeyRef:
+                          name: my-config
+                          key: api.hospital.url
                   resources:
                     limits:
                       cpu: 500m
@@ -98,13 +104,15 @@ phases:
                     periodSeconds: 5
                     failureThreshold: 10
                   livenessProbe:
-                    httpGet:
-                      path: '/actuator/health'
-                      port: 8080
+                    exec:
+                      command:
+                      - cat
+                      - /tmp/check
+                    failureThreshold: 1
                     initialDelaySeconds: 120
-                    timeoutSeconds: 2
                     periodSeconds: 5
-                    failureThreshold: 5         
+                    successThreshold: 1
+                    timeoutSeconds: 1       
         EOF
 cache:
   paths:
