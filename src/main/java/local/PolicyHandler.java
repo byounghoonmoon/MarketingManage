@@ -27,7 +27,7 @@ public class PolicyHandler{
             if(completed.isMe()){
                 Marketing temp = new Marketing();
                 temp.setCustNm(completed.getCustNm());
-                temp.setHospitalId(completed.getHospitalId());
+                temp.setHospitalId(Long.parseLong(completed.getHospitalId()));
                 temp.setHospitalNm(completed.getHospitalNm());
                 temp.setResvid(completed.getId());
                 marketingRepository.save(temp);

@@ -14,7 +14,7 @@ public class Marketing {
     private Long resvid;
     private String custNm;
     private String hospitalNm;
-    private String hospitalId;
+    private Long hospitalId;
     private String status;
 
     public String getStatus() {
@@ -53,11 +53,11 @@ public class Marketing {
     public void setHospitalNm(String hospitalNm) {
         this.hospitalNm = hospitalNm;
     }
-    public String getHospitalId() {
+    public Long getHospitalId() {
         return hospitalId;
     }
 
-    public void setHospitalId(String hospitalId) {
+    public void setHospitalId(Long hospitalId) {
         this.hospitalId = hospitalId;
     }
 
@@ -65,6 +65,15 @@ public class Marketing {
 
     @PostUpdate
     public void onPostUpdate(){
+
+        // Req / Res : 동기 방식 호출)
+        local.external.Hospital hospital = new local.external.Hospital();
+        hospital.setHospitalId(getHospitalId());
+        // mappings goes here
+        MarketingManageApplication.applicationContext.getBean(local.external.HospitalService.class)
+                .screeningRequest(hospital.getHospitalId(),hospital);
+
+
         IncrementRequested incrementRequested = new IncrementRequested();
         BeanUtils.copyProperties(this, incrementRequested);
         incrementRequested.publishAfterCommit();
