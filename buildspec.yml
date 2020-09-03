@@ -103,16 +103,6 @@ phases:
                     timeoutSeconds: 2
                     periodSeconds: 5
                     failureThreshold: 10
-                  livenessProbe:
-                    exec:
-                      command:
-                      - cat
-                      - /tmp/check
-                    failureThreshold: 1
-                    initialDelaySeconds: 120
-                    periodSeconds: 5
-                    successThreshold: 1
-                    timeoutSeconds: 1       
         EOF
 cache:
   paths:
