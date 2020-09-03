@@ -15,7 +15,15 @@ public class Marketing {
     private String custNm;
     private String hospitalNm;
     private String hospitalId;
+    private String status;
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public Long getId() {
         return id;
@@ -55,5 +63,11 @@ public class Marketing {
 
 
 
+    @PostUpdate
+    public void onPostUpdate(){
+        IncrementRequested incrementRequested = new IncrementRequested();
+        BeanUtils.copyProperties(this, incrementRequested);
+        incrementRequested.publishAfterCommit();
+    }
 
 }
